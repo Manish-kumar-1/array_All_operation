@@ -13,7 +13,7 @@ void insert_element(){
 
 	for(i=n;i<n+m;i++){
 		printf("N%d=",i+1);
-		scanf("%d",&a[i]);
+		scanf("%d",a+i);
 	}
 	n=n+m;
 	printf("\nInserting elements Successfully...\n");
@@ -21,21 +21,21 @@ void insert_element(){
 void display(){
 	printf("\n****** Array Elements ********\n[ ");
 	for(i=0;i<n-1;i++){
-		printf("%d,",a[i]);
+		printf("%d,",*(a+i));
 	}
-	printf("%d ]\n",a[i]);
+	printf("%d ]\n",*(a+i));
 }
 void delete_element(){
 	int flag,ele,j;
 	printf("\nEnter element to be delete:");
 	scanf("%d",&ele);
 	for(i=0;i<n;i++){
-		if(ele==a[i]){
+		if(ele==*(a+i)){
 			flag=1;
 			for(j=i;j<n-1;j++){
-				a[j]=a[j+1];
+				*(a+j)=*(a+(j+1));
 			}
-			a[j]=NULL;
+			*(a+j)=NULL;
 			n--;
 		}
 	}
@@ -47,10 +47,10 @@ int delete_Index_element(){
 	printf("\nEnter index of element to be delete:");
 	scanf("%d",&index);
 	for(i=index;i<n-1;i++)
-			a[i]=a[i+1];
-	a[i]=NULL;
+			*(a+i)=*(a+(i+1));
+	*(a+i)=NULL;
 	n--;
-	printf("\nDelete %d index element successfull...\n");
+	printf("\nDelete %d index element successfull...\n",index);
 	return index;
 }
 int insert_element_index(){
@@ -61,24 +61,33 @@ int insert_element_index(){
 	scanf("%d",&index);
 	n++;
 	for(i=n-1;i>index;i--)
-			a[i]=a[i-1];
-	a[index]=ele;
+			*(a+i)=*(a+(i-1));
+	*(a+index)=ele;
 	printf("\nInsert Element at %d index successfull...\n",index);
 	return index;
 }
 void short_array(){
 	int j,min,temp;
 	for(i=0;i<n;i++){
-		min=a[i];
+		min=*(a+i);
 		for(j=i+1;j<n;j++){
-			if(min>a[j]){
+			if(min>*(a+j)){
 				temp=min;
-				min=a[j];
-				a[j]=temp;
+				min=*(a+j);
+				*(a+j)=temp;
 			}
 		}
-		a[i]=min;
+		*(a+i)=min;
        }
+}
+void Array_rev(){
+	int temp;
+	for(i=0;i<=(n%2?(n/2):(n+1)/2);i++){
+		  temp=*(a+i);
+		  *(a+i)=*(a+(n-1-i));
+		  *(a+(n-1-i))=temp;
+	}
+
 }
 void main(){
 	int choice,index;
@@ -93,7 +102,7 @@ void main(){
 		printf("Enter %d element one by one:\n",n);
 		for(i=0;i<n;i++){
 			printf("N%d:",i+1);
-			scanf("%d",&a[i]);
+			scanf("%d",a+i);
 		}
 		do{
 			printf("\n****** Arry operation perform ******\n");
@@ -102,6 +111,7 @@ void main(){
 			printf("3.Delete an element (from particular index)\n");
 			printf("4.Insert an element in a particular index\n");
 			printf("5.Shorting ArrayList\n");
+			printf("6.Reversec ArrayList\n");
 			printf("0.Again Create array\n");
 			printf("Enter your choice:");
 			scanf("%d",&choice);
@@ -130,6 +140,12 @@ void main(){
 					short_array();
 					printf("\nAfter shorting Your elements:\n");
 					display();
+					break;
+				case 6:
+					Array_rev();
+					printf("\nAfter Reversing Your Array elements:\n");
+					display();
+					break;
 				case 0:
 					break;
 				default:
